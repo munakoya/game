@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>◯✕ゲーム</title>
+
+    <style>
+        table {
+            border: 3px solid;
+            text-align: center;
+            vertical-align: middle
+        }
+
+        td {
+            border: 3px solid;
+            width: 50px;
+            height: 50px
+        }
+
+        button {
+            width: 30px;
+            height: 30px
+        }
+    </style>
+</head>
+
+<body>
+    <h1>◯✕ゲーム</h1>
+    <h2>
+        {{if $.Win}}
+        <!-- 勝ち負けがついているか？ -->
+        [{{$.Winner}}の勝ち]
+        {{else if $.Draw}}
+        <!-- 引き分けか？ -->
+        [引き分け]
+        {{else}}
+        <!-- ゲーム中か？ -->
+        [{{$.Turn}}の手番]
+        {{end}}
+
+    </h2>
+    <form action="/game" method="post">
+        <input type="hidden" name="turn" value="{{$.Turn}}">
+        <table>
+            <tr>
+                {{range $i, $array := $.Board}}
+                {{range $j, $value := $array}}
+                <td>
+                    {{if $value}} {{/* 「"○"」または「"×"」の場合 */}}
+                    {{$value}}
+                    <input type="hidden" name="c{{$i}},{{$j}}" value="{{$value}}">
+                    {{else}} {{/* 「""」の場合 */}}
+                    <button name="c{{$i}},{{$j}}" value="{{$.Turn}}"></button>
+                    {{end}}
+                </td>
+                {{end}}
+            </tr>
+            {{end}}
+        </table>
+    </form>
+    <hr>
+    <a href="/game">もう一度</a>
+</body>
+
+</html>
+
+<!-- 
+    Todo
+    ・フロント周りの実装 → vue, react, css, bootstrapなど
+    ・(五目並べ) → 勝利判定書き足す必要あり
+ -->
